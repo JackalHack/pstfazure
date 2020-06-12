@@ -26,9 +26,7 @@ variable "sec_principal_id" {
   type = string
 }
 
-
 data "azurerm_subscription" "current" {}
-
 
 provider "azurerm" {
   features{}
