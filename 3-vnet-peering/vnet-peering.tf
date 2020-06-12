@@ -29,7 +29,7 @@ variable "sec_principal_id" {
 data "azurerm_subscription" "current" {}
 
 provider "azurerm" {
-  features{}
+  features {}
   #version = "~> 1.0"
   alias           = "security"
   subscription_id = var.sec_sub_id
