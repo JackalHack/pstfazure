@@ -8,13 +8,13 @@ variable "resource_group_name" {
 
 variable "location" {
   type    = string
-  default = "eastus"
+  default = "eastus2"
 }
 
 
 variable "vnet_cidr_range" {
-  type    = string
-  default = "10.0.0.0/16"
+  type    = list(string)
+  default = ["10.0.0.0/16"]
 }
 
 variable "subnet_prefixes" {
@@ -32,7 +32,13 @@ variable "subnet_names" {
 #############################################################################
 
 provider "azurerm" {
-  version = "~> 1.0"
+  features {}
+  #version = "~> 1.0"
+}
+
+resource "azurerm_resource_group" "mygroup" {
+  name     = var.resource_group_name
+  location = var.location
 }
 
 #############################################################################
@@ -41,8 +47,9 @@ provider "azurerm" {
 
 module "vnet-main" {
   source              = "Azure/vnet/azurerm"
-  resource_group_name = var.resource_group_name
-  location            = var.location
+  resource_group_name = azurerm_resource_group.mygroup.name
+  # var.resource_group_name
+  #location            = var.location
   vnet_name           = var.resource_group_name
   address_space       = var.vnet_cidr_range
   subnet_prefixes     = var.subnet_prefixes
