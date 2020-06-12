@@ -9,12 +9,12 @@ variable "sec_resource_group_name" {
 
 variable "location" {
   type    = string
-  default = "eastus"
+  default = "eastus2"
 }
 
 variable "vnet_cidr_range" {
-  type    = string
-  default = "10.1.0.0/16"
+  type    = list(string)
+  default = ["10.1.0.0/16"]
 }
 
 variable "sec_subnet_prefixes" {
@@ -38,7 +38,8 @@ data "azurerm_subscription" "current" {}
 #############################################################################
 
 provider "azurerm" {
-  version = "~> 1.0"
+  features {}
+  #version = "~> 1.0"
 }
 
 provider "azuread" {
@@ -63,7 +64,7 @@ resource "azurerm_resource_group" "sec" {
 module "vnet-sec" {
   source              = "Azure/vnet/azurerm"
   resource_group_name = azurerm_resource_group.sec.name
-  location            = var.location
+  #location            = var.location
   vnet_name           = azurerm_resource_group.sec.name
   address_space       = var.vnet_cidr_range
   subnet_prefixes     = var.sec_subnet_prefixes
