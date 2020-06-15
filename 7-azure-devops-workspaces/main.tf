@@ -8,16 +8,16 @@ variable "resource_group_name" {
 
 variable "location" {
   type    = string
-  default = "eastus"
+  default = "eastus2"
 }
 
 
 variable "vnet_cidr_range" {
-  type = map(string)
+  type = map(list(string))
   default = {
-    development = "10.2.0.0/16"
-    uat         = "10.3.0.0/16"
-    production        = "10.4.0.0/16"
+    development = ["10.2.0.0/16"]
+    uat         = ["10.3.0.0/16"]
+    production  = ["10.4.0.0/16"]
   }
 }
 
@@ -35,7 +35,8 @@ locals {
 #############################################################################
 
 provider "azurerm" {
-  version = "~> 1.0"
+  features {}
+  #version = "~> 1.0"
 }
 
 #############################################################################
@@ -48,7 +49,7 @@ data "template_file" "subnet_prefixes" {
   template = "$${cidrsubnet(vnet_cidr,8,current_count)}"
 
   vars = {
-    vnet_cidr     = var.vnet_cidr_range[terraform.workspace]
+    vnet_cidr     = var.vnet_cidr_range[terraform.workspace][0]
     current_count = count.index
   }
 }
@@ -65,7 +66,7 @@ resource "azurerm_resource_group" "main" {
 module "vnet-main" {
   source              = "Azure/vnet/azurerm"
   resource_group_name = azurerm_resource_group.main.name
-  location            = var.location
+  #location            = var.location
   vnet_name           = azurerm_resource_group.main.name
   address_space       = var.vnet_cidr_range[terraform.workspace]
   subnet_prefixes     = data.template_file.subnet_prefixes[*].rendered
