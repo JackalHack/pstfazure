@@ -22,7 +22,7 @@ variable "naming_prefix" {
 
 variable "location" {
   type    = string
-  default = "eastus"
+  default = "eastus2"
 }
 
 variable "network_state" {
@@ -44,7 +44,8 @@ locals {
 #############################################################################
 
 provider "azurerm" {
-  version = "~> 1.0"
+  features {}
+  #version = "~> 1.0"
 }
 
 #############################################################################

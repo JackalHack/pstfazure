@@ -8,7 +8,7 @@ variable "resource_group_name" {
 
 variable "location" {
   type    = string
-  default = "eastus"
+  default = "eastus2"
 }
 
 variable "naming_prefix" {
@@ -21,7 +21,8 @@ variable "naming_prefix" {
 ##################################################################################
 
 provider "azurerm" {
-  version = "~> 1.0"
+  features {}
+  #version = "~> 1.0"
 }
 
 ##################################################################################
